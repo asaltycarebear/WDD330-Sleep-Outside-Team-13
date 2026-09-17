@@ -22,55 +22,19 @@ export function setClick(selector, callback) {
   qs(selector).addEventListener("click", callback);
 }
 
+// get the product id from the query string
 export function getParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const product = urlParams.get(param);
+  return product
 }
 
-export function renderListWithTemplate(
-  templateFn,
-  parentElement,
-  list,
-  position = "afterbegin",
-  clear = false,
-) {
+export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
+  const htmlStrings = list.map(template);
+  // if clear is true we need to clear out the contents of the parent.
   if (clear) {
     parentElement.innerHTML = "";
   }
-  const htmlStrings = list.map(templateFn);
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
-}
-
-export function updateCartCount() {
-  const cart = getLocalStorage("so-cart") || [];
-  const count = Array.isArray(cart) ? cart.length : cart ? 1 : 0;
-  let badge = document.querySelector(".cart-count");
-  if (!badge) {
-    const cartLink = document.querySelector(".cart a");
-    if (cartLink) {
-      badge = document.createElement("sup");
-      badge.className = "cart-count";
-      cartLink.appendChild(badge);
-    }
-  }
-  if (badge) {
-    if (count > 0) {
-      badge.textContent = count;
-      badge.style.display = "flex";
-      badge.classList.remove("pop");
-      void badge.offsetWidth;
-      badge.classList.add("pop");
-    } else {
-      badge.textContent = "";
-      badge.style.display = "none";
-    }
-  }
-}
-
-if (typeof window !== "undefined") {
-  if (document.readyState === "loading") {
-    window.addEventListener("DOMContentLoaded", updateCartCount);
-  } else {
-    updateCartCount();
-  }
 }
