@@ -1,10 +1,11 @@
 import { getParam } from "./utils.mjs";
 import ProductData from "./ProductData.mjs";
-import getParam from "./utils.mjs";
+import ProductDetails from "./ProductDetails.mjs";
 
 const productId = getParam("product");
 const dataSource = new ProductData("tents");
-const productId = getParam("product");
+const product = new ProductDetails(productID, dataSource);
+product.init();
 
 function addProductToCart(product) {
   const cart = getLocalStorage("so-cart") || []; // "|| means or, so it is an or give me an empty array"
