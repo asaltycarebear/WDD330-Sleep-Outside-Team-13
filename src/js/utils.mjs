@@ -52,9 +52,18 @@ export async function loadTemplate(path) {
   return template;
 }
 
-//need to add footer here.
-export async function loadHeaderFoother() {
-  const headerTemplate = await loadTemplate("../partials/header.html");
+export async function loadHeaderFooter() {
+  const headerTemplate = await loadTemplate("/partials/header.html");
+  const footerTemplate = await loadTemplate("/partials/footer.html");
+
   const headerElement = document.querySelector("#main-header");
-  renderWithTemplate(headerTemplate, headerElement);
+  const footerElement = document.querySelector("#main-footer");
+
+  if (headerElement && headerTemplate) {
+    renderWithTemplate(headerTemplate, headerElement);
+  }
+  if (footerElement && footerTemplate) {
+    renderWithTemplate(footerTemplate, footerElement);
+  }
 }
+

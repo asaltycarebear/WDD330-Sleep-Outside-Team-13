@@ -1,24 +1,18 @@
 /*
-This is just a file for testing. I just wanted a space that would not matter if it was messed up by merging
-
+This is just a file for testing.
 */
 
-async (params) => {};
-
-//Basic arrow function
-const variable = (parameter) => {
-  // notes
+// Basic arrow function
+export const variableArrow = (parameter) => {
   console.log("[text here] " + parameter);
 };
 
-//Basic function declaration
-function variable(parameter) {
-  // notes
+// Basic function declaration
+export function variableDeclaration(parameter) {
   console.log("[text here] " + parameter);
 }
 
-//Basic function expression
-const variable = function (parameter) {
-  // notes
+// Basic function expression
+export const variableExpression = function (parameter) {
   console.log("[text here] " + parameter);
 };
