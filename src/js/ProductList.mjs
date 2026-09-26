@@ -22,6 +22,10 @@ export default class ProductList {
 
     async init() {
         const list = await this.dataSource.getData(this.category);
+
+        //added for testing
+        console.log("Products returned from API:", list);
+
         this.renderList(list);
         //added week 3 along with getData paramaters
         document.querySelector(".title").textContent = this.category;
