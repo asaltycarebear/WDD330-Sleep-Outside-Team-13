@@ -67,3 +67,36 @@ export async function loadHeaderFooter() {
   }
 }
 
+export function alertMessage(message, scroll = true) {
+  const alert = document.createElement("div");
+  alert.classList.add("alert");
+
+  const alertText = document.createElement("p");
+  alertText.textContent = message;
+
+  const closeButton = document.createElement("button");
+  closeButton.type = "button";
+  closeButton.textContent = "X";
+  closeButton.setAttribute("aria-label", "Close alert");
+  closeButton.addEventListener("click", () => {
+    alert.remove();
+  });
+
+  alert.appendChild(alertText);
+  alert.appendChild(closeButton);
+
+  const main = document.querySelector("main");
+  if (main) {
+    main.prepend(alert);
+  }
+  if (scroll) {
+    window.scrollTo(0, 0);
+  }
+}
+
+export function removeAllAlerts() {
+  const alerts = document.querySelectorAll(".alert");
+  alerts.forEach((alert) => alert.remove());
+}
+
+

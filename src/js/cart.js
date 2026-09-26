@@ -9,7 +9,25 @@ function renderCartContents() {
   if (listElement) {
     listElement.innerHTML = htmlItems.join("");
   }
+
+  const cartFooter = document.querySelector(".cart-footer");
+  if (cartFooter) {
+    if (cartItems.length > 0) {
+      cartFooter.classList.remove("hide");
+      const total = cartItems.reduce(
+        (sum, item) => sum + Number(item.FinalPrice || 0),
+        0
+      );
+      const totalElem = document.querySelector(".cart-total-value");
+      if (totalElem) {
+        totalElem.textContent = `$${total.toFixed(2)}`;
+      }
+    } else {
+      cartFooter.classList.add("hide");
+    }
+  }
 }
+
 
 function cartItemTemplate(item) {
   const imgSrc =
