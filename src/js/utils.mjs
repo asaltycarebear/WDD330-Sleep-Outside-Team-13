@@ -41,6 +41,30 @@ export function renderListWithTemplate(
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
 
+export function renderWithTemplate(template, parentElement, data, callback) {
+  parentElement.innerHTML = template;
+  if (callback) {
+    callback(data);
+  }
+}
+
+export async function loadTemplate(path) {
+  const res = await fetch(path);
+  const template = await res.text();
+  return template;
+}
+
+export async function loadHeaderFooter() {
+  const headerTemplate = await loadTemplate("/partials/header.html");
+  const footerTemplate = await loadTemplate("/partials/footer.html");
+
+  const headerElement = document.querySelector("#main-header");
+  const footerElement = document.querySelector("#main-footer");
+
+  renderWithTemplate(headerTemplate, headerElement, null, updateCartCount);
+  renderWithTemplate(footerTemplate, footerElement);
+}
+
 export function updateCartCount() {
   const cart = getLocalStorage("so-cart") || [];
   const count = Array.isArray(cart) ? cart.length : cart ? 1 : 0;
@@ -64,13 +88,5 @@ export function updateCartCount() {
       badge.textContent = "";
       badge.style.display = "none";
     }
-  }
-}
-
-if (typeof window !== "undefined") {
-  if (document.readyState === "loading") {
-    window.addEventListener("DOMContentLoaded", updateCartCount);
-  } else {
-    updateCartCount();
   }
 }

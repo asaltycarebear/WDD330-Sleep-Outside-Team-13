@@ -2,9 +2,9 @@ import { renderListWithTemplate } from "./utils.mjs";
 
 function productCardTemplate(product) {
   return `<li class="product-card">
-    <a href="product_pages/?product=${product.Id}">
+    <a href="/product_pages/index.html?product=${product.Id}">
       <img
-        src="${product.Image}"
+        src="${product.Images.PrimaryMedium}"
         alt="Image of ${product.Name}"
       />
       <h3 class="card__brand">${product.Brand.Name}</h3>
@@ -12,6 +12,13 @@ function productCardTemplate(product) {
       <p class="product-card__price">$${product.FinalPrice}</p>
     </a>
   </li>`;
+}
+
+function formatCategory(category) {
+  return category
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 export default class ProductList {
@@ -22,8 +29,14 @@ export default class ProductList {
   }
 
   async init() {
-    const list = await this.dataSource.getData();
+    const list = await this.dataSource.getData(this.category);
     this.renderList(list);
+    const titleElement = document.querySelector(".title");
+    if (titleElement && this.category) {
+      const prettyCategory = formatCategory(this.category);
+      titleElement.textContent = `Top Products: ${prettyCategory}`;
+      document.title = `Sleep Outside | ${prettyCategory}`;
+    }
   }
 
   renderList(list) {

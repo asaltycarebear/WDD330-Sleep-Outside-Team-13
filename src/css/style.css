@@ -203,6 +203,29 @@ button {
   padding: 1rem;
 }
 
+.product-grid {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  list-style-type: none;
+  text-align: center;
+  gap: 1rem;
+}
+
+.product-grid li {
+  flex: 1 1 150px;
+  max-width: 200px;
+}
+
+.product-grid a {
+  text-decoration: none;
+  color: var(--dark-grey);
+}
+
+.product-grid img {
+  width: 100%;
+}
+
 .product-list {
   display: flex;
   flex-flow: row wrap;
