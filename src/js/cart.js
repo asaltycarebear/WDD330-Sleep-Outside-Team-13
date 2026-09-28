@@ -98,6 +98,7 @@ function cartItemTemplate(item) {
 </li>`;
 
   return newItem;
+}
 
 // Below added function for week 2 individual activity, cgs
 function removeFromCart(productId) {
