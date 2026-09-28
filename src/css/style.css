@@ -328,6 +328,24 @@ button {
 .cart-card__quantity {
   grid-row: 1;
   grid-column: 3;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25em;
+}
+
+.cart-card__quantity button {
+  padding: 0.25em 0.5em;
+  margin: 0;
+  font-size: 1em;
+}
+
+.cart-card__quantity input {
+  width: 45px;
+  padding: 0.25em;
+  text-align: center;
+  font-size: 1em;
 }
 
 .cart-card__price {
