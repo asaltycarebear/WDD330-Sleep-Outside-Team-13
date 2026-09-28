@@ -55,7 +55,7 @@ function cartItemTemplate(item) {
       ? item.Colors[0].ColorName
       : "";
 
-  const newItem = `< li class="cart-card divider" >
+  const newItem = `<li class="cart-card divider">
   <a href="/product_pages/?product=${item.Id}" class="cart-card__image">
     <img
       src="${imgSrc}"
@@ -95,10 +95,9 @@ function cartItemTemplate(item) {
   <button class="remove-from-cart" data-id="${item.Id}">
     Remove
   </button>
-</li > `;
+</li>`;
 
   return newItem;
-}
 
 // Below added function for week 2 individual activity, cgs
 function removeFromCart(productId) {
