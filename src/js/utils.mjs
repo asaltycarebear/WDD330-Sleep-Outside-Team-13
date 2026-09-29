@@ -5,6 +5,9 @@ export function qs(selector, parent = document) {
 // or a more concise version if you are into that sort of thing:
 // export const qs = (selector, parent = document) => parent.querySelector(selector);
 
+export const CART_KEY = "so-cart";
+export const WISHLIST_KEY = "so-wishlist";
+
 // retrieve data from localstorage
 export function getLocalStorage(key) {
   return JSON.parse(localStorage.getItem(key));
@@ -12,6 +15,40 @@ export function getLocalStorage(key) {
 // save data to local storage
 export function setLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
+}
+
+export function getWishlist() {
+  return getLocalStorage(WISHLIST_KEY) || [];
+}
+
+export function isInWishlist(productId) {
+  return getWishlist().some((item) => item.Id === productId);
+}
+
+export function addToWishlist(product) {
+  const wishlist = getWishlist();
+  if (wishlist.some((item) => item.Id === product.Id)) {
+    return wishlist;
+  }
+  wishlist.push(product);
+  setLocalStorage(WISHLIST_KEY, wishlist);
+  updateWishlistCount();
+  return wishlist;
+}
+
+export function removeFromWishlist(productId) {
+  const wishlist = getWishlist().filter((item) => item.Id !== productId);
+  setLocalStorage(WISHLIST_KEY, wishlist);
+  updateWishlistCount();
+  return wishlist;
+}
+
+export function addProductToCart(product) {
+  const cart = getLocalStorage(CART_KEY) || [];
+  cart.push(product);
+  setLocalStorage(CART_KEY, cart);
+  updateCartCount();
+  return cart;
 }
 // set a listener for both touchend and click
 export function setClick(selector, callback) {
@@ -61,32 +98,37 @@ export async function loadHeaderFooter() {
   const headerElement = document.querySelector("#main-header");
   const footerElement = document.querySelector("#main-footer");
 
-  renderWithTemplate(headerTemplate, headerElement, null, updateCartCount);
+  renderWithTemplate(headerTemplate, headerElement, null, () => {
+    updateCartCount();
+    updateWishlistCount();
+  });
   renderWithTemplate(footerTemplate, footerElement);
 }
 
-export function updateCartCount() {
-  const cart = getLocalStorage("so-cart") || [];
-  const count = Array.isArray(cart) ? cart.length : cart ? 1 : 0;
-  let badge = document.querySelector(".cart-count");
+function updateBadge(selector, count) {
+  const badge = document.querySelector(selector);
   if (!badge) {
-    const cartLink = document.querySelector(".cart a");
-    if (cartLink) {
-      badge = document.createElement("sup");
-      badge.className = "cart-count";
-      cartLink.appendChild(badge);
-    }
+    return;
   }
-  if (badge) {
-    if (count > 0) {
-      badge.textContent = count;
-      badge.style.display = "flex";
-      badge.classList.remove("pop");
-      void badge.offsetWidth;
-      badge.classList.add("pop");
-    } else {
-      badge.textContent = "";
-      badge.style.display = "none";
-    }
+  if (count > 0) {
+    badge.textContent = count;
+    badge.style.display = "flex";
+    badge.classList.remove("pop");
+    void badge.offsetWidth;
+    badge.classList.add("pop");
+  } else {
+    badge.textContent = "";
+    badge.style.display = "none";
   }
+}
+
+export function updateCartCount() {
+  const cart = getLocalStorage(CART_KEY) || [];
+  const count = Array.isArray(cart) ? cart.length : cart ? 1 : 0;
+  updateBadge(".cart-count", count);
+}
+
+export function updateWishlistCount() {
+  const wishlist = getWishlist();
+  updateBadge(".wishlist-count", wishlist.length);
 }

@@ -1,6 +1,12 @@
-import { getLocalStorage, setLocalStorage, updateCartCount } from "./utils.mjs";
+import {
+  addProductToCart,
+  addToWishlist,
+  isInWishlist,
+  removeFromWishlist,
+} from "./utils.mjs";
 
-function productDetailsTemplate(product) {
+function productDetailsTemplate(product, onWishlist) {
+  const wishlistLabel = onWishlist ? "Remove from Wishlist" : "Add to Wishlist";
   return `<section class="product-detail">
     <h3>${product.Brand.Name}</h3>
     <h2 class="divider">${product.NameWithoutBrand}</h2>
@@ -16,6 +22,9 @@ function productDetailsTemplate(product) {
     </p>
     <div class="product-detail__add">
       <button id="addToCart" data-id="${product.Id}">Add to Cart</button>
+      <button id="wishlistBtn" class="btn-secondary" data-id="${product.Id}">
+        ${wishlistLabel}
+      </button>
     </div>
   </section>`;
 }
@@ -28,30 +37,38 @@ export default class ProductDetails {
   }
 
   async init() {
-    // use the datasource to get the details for the current product. findProductById will return a promise!
     this.product = await this.dataSource.findProductById(this.productId);
-
-    // the product details are needed before rendering the HTML
     this.renderProductDetails("main");
 
-    // once the HTML is rendered, add a listener to the Add to Cart button
-    // Notice the .bind(this). This callback will not work if the bind(this) is missing.
     document
       .getElementById("addToCart")
       .addEventListener("click", this.addToCart.bind(this));
+    document
+      .getElementById("wishlistBtn")
+      .addEventListener("click", this.toggleWishlist.bind(this));
   }
 
   addToCart() {
-    this.addProductToCart(this.product);
+    addProductToCart(this.product);
   }
 
-  addProductToCart(product = this.product) {
-    const itemToAdd =
-      product && !(product instanceof Event) ? product : this.product;
-    const cart = getLocalStorage("so-cart") || [];
-    cart.push(itemToAdd);
-    setLocalStorage("so-cart", cart);
-    updateCartCount();
+  toggleWishlist() {
+    if (isInWishlist(this.product.Id)) {
+      removeFromWishlist(this.product.Id);
+    } else {
+      addToWishlist(this.product);
+    }
+    this.updateWishlistButton();
+  }
+
+  updateWishlistButton() {
+    const button = document.getElementById("wishlistBtn");
+    if (!button) {
+      return;
+    }
+    button.textContent = isInWishlist(this.product.Id)
+      ? "Remove from Wishlist"
+      : "Add to Wishlist";
   }
 
   renderProductDetails(selector = "main") {
@@ -60,7 +77,10 @@ export default class ProductDetails {
       element.innerHTML = "<p class=\"error\">Product not found.</p>";
       return;
     }
-    element.innerHTML = productDetailsTemplate(this.product);
+    element.innerHTML = productDetailsTemplate(
+      this.product,
+      isInWishlist(this.product.Id),
+    );
     document.title = `Sleep Outside | ${this.product.Name}`;
   }
 }
