@@ -50,6 +50,30 @@ export function addProductToCart(product) {
   updateCartCount();
   return cart;
 }
+
+export function alertMessage(message, scroll = true) {
+  const main = document.querySelector('main');
+  if (!main) return;
+
+  const alert = document.createElement('div');
+  alert.classList.add('alert');
+
+  const text = document.createElement('p');
+  text.textContent = typeof message === 'string' ? message : JSON.stringify(message);
+
+  const dismiss = document.createElement('button');
+  dismiss.type = 'button';
+  dismiss.classList.add('alert__dismiss');
+  dismiss.setAttribute('aria-label', 'Dismiss message');
+  dismiss.textContent = '×';
+
+  alert.append(text, dismiss);
+  dismiss.addEventListener('click', () => alert.remove());
+  main.prepend(alert);
+
+  if (scroll) window.scrollTo(0, 0);
+}
+
 // set a listener for both touchend and click
 export function setClick(selector, callback) {
   qs(selector).addEventListener("touchend", (event) => {

@@ -1,27 +1,57 @@
 <!doctype html>
 
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <meta charset="UTF-8" />
 
-    <title>Sleep Outside | Checkout</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="/css/style.css" />
+  <title>Sleep Outside | Checkout</title>
 
-    <script src="../js/checkout.js" type="module"></script>
-  </head>
+  <link rel="stylesheet" href="/css/style.css" />
 
-  <body>
-    <header class="divider" id="main-header"></header>
+  <script src="../js/checkout.js" type="module"></script>
+</head>
 
-    <main class="divider">
-      <section class="products">
-        <h2>Review & Place your Order</h2>
-      </section>
-    </main>
+<body>
+  <header class="divider" id="main-header"></header>
 
-    <footer id="main-footer"></footer>
-  </body>
+  <main class="divider">
+    <section class="products">
+      <h2>Review & Place your Order</h2>
+      <div class="checkout-layout">
+        <form id="checkout-form">
+          <fieldset>
+            <legend>Shipping information</legend>
+            <label>First name <input name="fname" autocomplete="given-name" required /></label>
+            <label>Last name <input name="lname" autocomplete="family-name" required /></label>
+            <label>Street address <input name="street" autocomplete="street-address" required /></label>
+            <label>City <input name="city" autocomplete="address-level2" required /></label>
+            <label>State <input name="state" autocomplete="address-level1" minlength="2" maxlength="2"
+                required /></label>
+            <label>ZIP code <input name="zip" autocomplete="postal-code" inputmode="numeric"
+                pattern="[0-9]{5}(-[0-9]{4})?"
+                title="Enter a 5-digit ZIP code, optionally followed by a 4-digit extension." required /></label>
+          </fieldset>
+          <fieldset>
+            <legend>Payment information</legend>
+            <label>Card number <input name="cardNumber" inputmode="numeric" autocomplete="cc-number"
+                pattern="[0-9]{13,19}" title="Enter a card number using 13 to 19 digits." required /></label>
+            <label>Expiration date <input name="expiration" type="month" autocomplete="cc-exp" required /></label>
+          </fieldset>
+          <button id="checkoutSubmit" type="submit">Place order</button>
+        </form>
+        <aside class="checkout-summary" aria-labelledby="checkout-summary-title">
+          <h3 id="checkout-summary-title">Order summary</h3>
+          <ul id="checkout-items"></ul>
+          <p id="checkout-total">Total: $0.00</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer id="main-footer"></footer>
+</body>
+
 </html>
