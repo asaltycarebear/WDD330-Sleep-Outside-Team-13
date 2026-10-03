@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML Data Attributes Demo</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "Segoe UI", sans-serif;
+            color: #202a2e;
+            background: #f5f7f4;
+        }
+
+        body {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 2rem 1.25rem;
+        }
+
+        h1,
+        h2 {
+            color: #173d38;
+        }
+
+        #items {
+            display: grid;
+            gap: 0.65rem;
+            padding: 0;
+            list-style: none;
+        }
+
+        #items li {
+            overflow: hidden;
+            border: 1px solid #d5ded9;
+            border-radius: 6px;
+        }
+
+        #items button {
+            width: 100%;
+            padding: 1rem;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        #items button:focus-visible {
+            outline: 3px solid #126b61;
+            outline-offset: -3px;
+        }
+
+        li[data-category="fruit"] {
+            background: #fff4c7;
+        }
+
+        li[data-category="vegetable"] {
+            background: #dff1df;
+        }
+
+        li[data-category="dairy"] {
+            background: #dceefa;
+        }
+
+        #details,
+        .reflection {
+            margin-top: 1.5rem;
+            padding: 1rem 1.25rem;
+            border-left: 4px solid #126b61;
+            background: #fff;
+        }
+
+        #details[hidden] {
+            display: none;
+        }
+
+        .reflection li {
+            margin-block: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>Explore item data</h1>
+        <p>Select an item to view the values stored in its <code>data-*</code> attributes.</p>
+
+        <ul id="items">
+            <li data-name="banana" data-category="fruit" data-color="yellow">
+                <button type="button">Banana</button>
+            </li>
+            <li data-name="carrot" data-category="vegetable" data-color="orange">
+                <button type="button">Carrot</button>
+            </li>
+            <li data-name="blueberry" data-category="fruit" data-color="blue">
+                <button type="button">Blueberry</button>
+            </li>
+        </ul>
+
+        <section id="details" aria-live="polite" aria-atomic="true" hidden>
+            <h2>Item details</h2>
+            <p>Name: <span id="detail-name"></span></p>
+            <p>Category: <span id="detail-category"></span></p>
+            <p>Color: <span id="detail-color"></span></p>
+        </section>
+
+        <section class="reflection" aria-labelledby="reflection-heading">
+            <h2 id="reflection-heading">Reflection</h2>
+            <ul>
+                <li><strong>Advantages:</strong> Data attributes keep small pieces of metadata next to the element they
+                    describe and make them straightforward to read through <code>element.dataset</code>.</li>
+                <li><strong>Accessibility:</strong> Data attributes do not add accessibility by themselves. They can
+                    support accessible interactions, but use semantic elements, keyboard support, visible focus, and
+                    appropriate announcements as this demo does.</li>
+                <li><strong>When to use them:</strong> Use them for small, element-specific values needed by client-side
+                    behavior or CSS. Prefer visible HTML for user-facing content and application state for larger or
+                    frequently changing data.</li>
+                <li><strong>Validation and security:</strong> Treat attribute values as untrusted strings. Validate
+                    against expected values, avoid storing secrets, and insert displayed values as text rather than
+                    interpreting them as HTML.</li>
+            </ul>
+        </section>
+    </main>
+
+    <script>
+        const items = document.querySelectorAll('#items li');
+        const details = document.querySelector('#details');
+        const detailName = document.querySelector('#detail-name');
+        const detailCategory = document.querySelector('#detail-category');
+        const detailColor = document.querySelector('#detail-color');
+
+        items.forEach((item) => {
+            console.log('Name:', item.dataset.name);
+            console.log('Category:', item.dataset.category);
+            console.log('Color:', item.dataset.color);
+
+            item.querySelector('button').addEventListener('click', () => {
+                detailName.textContent = item.dataset.name;
+                detailCategory.textContent = item.dataset.category;
+                detailColor.textContent = item.dataset.color;
+                details.hidden = false;
+            });
+        });
+    </script>
+</body>
+
+</html>
